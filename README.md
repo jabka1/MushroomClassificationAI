@@ -1,1 +1,1 @@
-# jabka1-MushroomClassificationAI
+# Team23-MushroomClassificationAI
