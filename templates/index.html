@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mushroom Classification</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1, h2 {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            margin-top: 20px;
+        }
+
+        .result-poisonous {
+            background-color: #FFCCCC; /* Red for poisonous */
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .result-edible {
+            background-color: #CCFFCC; /* Green for edible */
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Verification of mushrooms for toxicity</h1>
+        <br>
+        <form method="post" action="/">
+            {% for attribute in attributes %}
+            <div class="form-group">
+                <label for="{{ attribute }}">{{ attribute }}:</label>
+                <select class="form-control" id="{{ attribute }}" name="{{ attribute }}">
+            {% if 'cap-shape' in attribute %}
+                <option value="b">bell</option>
+                <option value="c">conical</option>
+                <option value="x">convex</option>
+                <option value="f">flat</option>
+                <option value="k">knobbed</option>
+                <option value="s">sunken</option>
+            {% elif 'cap-surface' in attribute %}
+                <option value="f">fibrous</option>
+                <option value="g">grooves</option>
+                <option value="y">scaly</option>
+                <option value="s">smooth</option>
+            {% elif 'cap-color' in attribute %}
+                <option value="n">brown</option>
+                <option value="b">buff</option>
+                <option value="c">cinnamon</option>
+                <option value="g">gray</option>
+                <option value="r">green</option>
+                <option value="p">pink</option>
+                <option value="u">purple</option>
+                <option value="e">red</option>
+                <option value="w">white</option>
+                <option value="y">yellow</option>
+            {% elif 'bruises' in attribute %}
+                <option value="t">bruises</option>
+                <option value="f">no bruises</option>
+            {% elif 'odor' in attribute %}
+                <option value="a">almond</option>
+                <option value="l">anise</option>
+                <option value="c">creosote</option>
+                <option value="y">fishy</option>
+                <option value="f">foul</option>
+                <option value="m">musty</option>
+                <option value="n">none</option>
+                <option value="p">pungent</option>
+                <option value="s">spicy</option>
+            {% elif 'gill-attachment' in attribute %}
+                <option value="a">attached</option>
+                <option value="d">descending</option>
+                <option value="f">free</option>
+                <option value="n">notched</option>
+            {% elif 'gill-spacing' in attribute %}
+                <option value="c">close</option>
+                <option value="w">crowded</option>
+                <option value="d">distant</option>
+            {% elif 'gill-size' in attribute %}
+                <option value="b">wide</option>
+                <option value="n">narrow</option>
+            {% elif 'gill-color' in attribute %}
+                <option value="k">black</option>
+                <option value="n">brown</option>
+                <option value="b">buff</option>
+                <option value="h">chocolate</option>
+                <option value="g">gray</option>
+                <option value="r">green</option>
+                <option value="o">orange</option>
+                <option value="p">pink</option>
+                <option value="u">purple</option>
+                <option value="e">red</option>
+                <option value="w">white</option>
+                <option value="y">yellow</option>
+            {% elif 'stalk-shape' in attribute %}
+                <option value="e">enlarging</option>
+                <option value="t">tapering</option>
+            {% elif 'stalk-root' in attribute %}
+                <option value="b">bulbous</option>
+                <option value="c">club</option>
+                <option value="u">cup</option>
+                <option value="e">equal</option>
+                <option value="z">rhizomorphs</option>
+                <option value="r">rooted</option>
+                <option value="?">missing</option>
+            {% elif 'stalk-surface-above-ring' in attribute %}
+                <option value="f">fibrous</option>
+                <option value="y">scaly</option>
+                <option value="k">silky</option>
+                <option value="s">smooth</option>
+            {% elif 'stalk-surface-below-ring' in attribute %}
+                <option value="f">fibrous</option>
+                <option value="y">scaly</option>
+                <option value="k">silky</option>
+                <option value="s">smooth</option>
+            {% elif 'stalk-color-above-ring' in attribute %}
+                <option value="n">brown</option>
+                <option value="b">buff</option>
+                <option value="c">cinnamon</option>
+                <option value="g">gray</option>
+                <option value="o">orange</option>
+                <option value="p">pink</option>
+                <option value="e">red</option>
+                <option value="w">white</option>
+                <option value="y">yellow</option>
+            {% elif 'stalk-color-below-ring' in attribute %}
+                <option value="n">brown</option>
+                <option value="b">buff</option>
+                <option value="c">cinnamon</option>
+                <option value="g">gray</option>
+                <option value="o">orange</option>
+                <option value="p">pink</option>
+                <option value="e">red</option>
+                <option value="w">white</option>
+                <option value="y">yellow</option>
+            {% elif 'veil-type' in attribute %}
+                <option value="p">partial</option>
+                <option value="u">universal</option>
+            {% elif 'veil-color' in attribute %}
+                <option value="n">brown</option>
+                <option value="o">orange</option>
+                <option value="w">white</option>
+                <option value="y">yellow</option>
+            {% elif 'ring-number' in attribute %}
+                <option value="n">none</option>
+                <option value="o">one</option>
+                <option value="t">two</option>
+            {% elif 'ring-type' in attribute %}
+                <option value="c">cobwebby</option>
+                <option value="e">evanescent</option>
+                <option value="f">flaring</option>
+                <option value="l">large</option>
+                <option value="n">none</option>
+                <option value="p">pendant</option>
+                <option value="s">sheathing</option>
+                <option value="z">zone</option>
+            {% elif 'spore-print-color' in attribute %}
+                <option value="k">black</option>
+                <option value="n">brown</option>
+                <option value="b">buff</option>
+                <option value="h">chocolate</option>
+                <option value="r">green</option>
+                <option value="o">orange</option>
+                <option value="u">purple</option>
+                <option value="w">white</option>
+                <option value="y">yellow</option>
+            {% elif 'population' in attribute %}
+                <option value="a">abundant</option>
+                <option value="c">clustered</option>
+                <option value="n">numerous</option>
+                <option value="s">scattered</option>
+                <option value="v">several</option>
+                <option value="y">solitary</option>
+            {% elif 'habitat' in attribute %}
+                <option value="g">grasses</option>
+                <option value="l">leaves</option>
+                <option value="m">meadows</option>
+                <option value="p">paths</option>
+                <option value="u">urban</option>
+                <option value="w">waste</option>
+                <option value="d">woods</option>
+            {% endif %}
+        </select>
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>
+{% if prediction %}
+    {% if prediction == 'Poisonous' %}
+        <div class="result-poisonous">
+            <h2 class="mt-4">Result: {{ prediction }}</h2>
+        </div>
+    {% elif prediction == 'Edible' %}
+        <div class="result-edible">
+            <h2 class="mt-4">Result: {{ prediction }}</h2>
+        </div>
+    {% endif %}
+{% endif %}
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
