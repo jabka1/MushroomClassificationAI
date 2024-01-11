@@ -39,7 +39,7 @@ The following attributes are used for mushroom classification:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/mushroom-classification-web-app.git
+    git clone https://github.com/jabka1/MushroomClassificationAI
     cd mushroom-classification-web-app
     ```
 
